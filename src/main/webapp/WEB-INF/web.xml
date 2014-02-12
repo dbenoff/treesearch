@@ -6,7 +6,7 @@
 
 	<context-param>
 		<param-name>property_data</param-name>
-		<param-value>/WEB-INF/nrhp_test.xml.gz</param-value>
+		<param-value>/WEB-INF/nrhp.xml.gz</param-value>
 	</context-param>
 	
 	<context-param>

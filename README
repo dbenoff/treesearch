@@ -1,1 +1,18 @@
-Semantic Discovery Toolkit: https://code.google.com/p/semanticdiscoverytoolkit/
+This code was written a few years ago when I got interested in a data structure called a trie
+(http://en.wikipedia.org/wiki/Trie) for rapid text search and retrieval.
+
+This is used mainly in bioinformatics for gene sequencing.
+
+Oddly, there's no robust open-source Java implementation, so I did my own implementation as a fun exercise.
+
+With this application, I use a trie to solve the 'instant search' coding puzzle here: http://www.itasoftware.com/careers/puzzle_archive.html
+
+The challenge is to come up with a datastructure that allows near-instant retrieval but fits within 1gb of heap.
+
+The trie is very computationally intensive to build up front, so the app takes quite a while to start.
+
+You can edit web.xml and use nrhp_test.xml.gz rather than nrhp.xml.gz, this is a small subset of the data.
+
+Use the run-forked jetty goal to launch the app with the 1gb heap restriction and the proper GC settings.
+
+I just updated it to use Knockout and CXF rather than jQuery and Resteasy, one of these days I'll add unit tests, etc.
