@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+        >
+
+    <!-- Common service facility configuration -->
+
+    <!-- CXF Configuration -->
+
+    <!-- do not use import statements if CXFServlet init parameters link to this beans.xml -->
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-xml.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    <!-- JAX-RS -->
+    <jaxrs:server id="api" address="/">
+        <jaxrs:serviceBeans>
+            <ref bean="searchApi"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+            <entry key="xml" value="application/xml"/>
+            <entry key="csv" value="text/csv"/>
+        </jaxrs:extensionMappings>
+        <jaxrs:features>
+            <cxf:logging limit="1024"/>
+        </jaxrs:features>
+        <jaxrs:providers>
+            <ref bean="jaxbProvider"/>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+        <property name="marshallerProperties" ref="propertiesMap"/>
+    </bean>
+
+    <util:map id="propertiesMap">
+        <entry key="jaxb.formatted.output">
+            <value type="java.lang.Boolean">true</value>
+        </entry>
+    </util:map>
+
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+
+</beans>

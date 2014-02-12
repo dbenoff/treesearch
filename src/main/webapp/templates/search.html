@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="span4">
+        <div class="input-append">
+            <input class="input-xlarge" type="text" data-bind="value: searchTerm, valueUpdate: 'afterkeydown'" placeholder="Search term">
+        </div>
+
+        <div class="input-append">
+            <p data-bind="with: searchResult">
+                Total result count: <span data-bind="text: totalPropertyCount"> </span>,
+                Search time: <span data-bind="text: executionTime"> </span>
+            </p>
+        </div>
+        <table class="table table-hover table-bordered" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Search Results</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: searchResults">
+            <tr>
+                <td>
+                    <ul>
+                        <li data-bind="foreach: {data: names, as: 'propertyName'}">
+                            <!--ko if: $index() != 0-->,<!--/ko-->
+                            <span data-bind="html: propertyName"></span>
+                        </li>
+                        <li>
+                            <span data-bind="html: address"></span>
+                        </li>
+                        <li>
+                            <span data-bind="html: city"></span>
+                        </li>
+                        <li>
+                            <span data-bind="html: state"></span>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
