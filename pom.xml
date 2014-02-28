@@ -183,5 +183,10 @@
             <artifactId>jetty-all</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0.1</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,9 +1,9 @@
 package com.dbenoff.text.impl;
 
+import com.dbenoff.text.Node;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.dbenoff.text.Node;
 public final class TextNode implements Node<TextValue>{
 
 	private int recordCount;
@@ -87,5 +87,26 @@ public final class TextNode implements Node<TextValue>{
 				dumpGraph(child);
 			}
 	}
+
+    public void dumpGraphSimplified(){
+        dumpGraphSimplified(this);
+    }
+
+    private void dumpGraphSimplified(Node<TextValue> node){
+        if(node.getNodeValue()!= null){
+            StringBuffer buf = new StringBuffer();
+            Node<TextValue> parent = node.getParent();
+            while(parent != null){
+                parent = parent.getParent();
+                buf.append("-");
+            }
+            buf.append(node.getNodeValue().getText());
+            System.out.println(buf.toString());
+        }
+        if(node.getChildren() != null)
+            for(Node<TextValue> child : node.getChildren()){
+                dumpGraphSimplified(child);
+            }
+    }
 }
 
