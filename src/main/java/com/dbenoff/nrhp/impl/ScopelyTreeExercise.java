@@ -7,10 +7,7 @@ import com.sun.deploy.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ScopelyTreeExercise {
     Logger log = Logger.getLogger(this.getClass());
@@ -25,6 +22,7 @@ public class ScopelyTreeExercise {
         createMultipleLeavesTreeFromPath();
         createCombinatorialNodes();
         buildPath();
+        findSimilarSubtrees();
     }
 
     /**
@@ -70,8 +68,8 @@ public class ScopelyTreeExercise {
      example, give the path /home/sports|music/misc|favorites, it would create the following tree:
      */
     public TextNode createCombinatorialNodes(){
-        //List<String> pathElements = new ArrayList(Arrays.asList("home/music/rap|rock|pop".split("\\/")));  question 4
-        List<String> pathElements = new ArrayList(Arrays.asList("home/sports|music/misc|favorites".split("\\/")));     //question 5
+        //List<String> pathElements = new ArrayList(Arrays.asList("home/music/rap|rock|pop".split("\\/")));  question 3
+        List<String> pathElements = new ArrayList(Arrays.asList("home/sports|music/misc|favorites".split("\\/")));     //question 4
         List<String> expandedPathElements = new ArrayList<String>();
 
         for(int i = 0; i < pathElements.size(); i++){
@@ -94,13 +92,61 @@ public class ScopelyTreeExercise {
     }
 
     /**
-     * Write a function that takes as input a Tree and outputs a combinatorial tree. For example, in the
+     * part 5: Write a function that takes as input a Tree and outputs a combinatorial tree. For example, in the
      Tree displayed in Part 4, the output of the function would be: /home/sports|music/misc|favorites.
      */
     public void buildPath(){
         TextNode node = createCombinatorialNodes();
         pruneTree(node);
         node.dumpGraphSimplified();
+    }
+
+    /**
+     * Subtree Similarity Detection
+     Write a function that returns a “synonym” for a given path. For example, in the Tree displayed in
+     part 4, if the input was “/home/sports”, the output synonym would be “/home/music”. Let us
+     define two nodes to be synonyms if all their child nodes are identical. Here we define two nodes
+     to be identical if they have the same node name, even if they separate nodes. For example,
+     “favorites” under sports and “favorites” under music are identical under this definition of
+     name equality.
+     */
+
+    public void findSimilarSubtrees(){
+        Map<String, List<Node<TextValue>>> pathToNodeMap = new HashMap<String, List<Node<TextValue>>>();
+        TextNode node = createCombinatorialNodes();
+        walkTree(node, pathToNodeMap);
+        for(String key : pathToNodeMap.keySet()){
+            List<Node<TextValue>> nodes = pathToNodeMap.get(key);
+            if(nodes.size() > 1){
+                for(Node<TextValue> child : nodes){
+                    if(child.getNodeValue() == null){
+                        return;
+                    }
+                    System.out.println(child.getNodeValue().getText() + key);
+                }
+
+            }
+        }
+    }
+
+    public void walkTree(Node<TextValue> node, Map<String, List<Node<TextValue>>> pathToNodeMap){
+
+        if(CollectionUtils.isEmpty(node.getChildren()))
+            return;
+
+        StringBuffer buf = new StringBuffer();
+        List<Node<TextValue>> children = node.gatherLeaves(Integer.MAX_VALUE);
+        for(Node<TextValue> child : children){
+            buf.append(" " + child.getNodeValue().getText());
+        }
+        String subtree = buf.toString();
+        if(!pathToNodeMap.containsKey(subtree)){
+            pathToNodeMap.put(subtree, new ArrayList<Node<TextValue>>());
+        }
+        pathToNodeMap.get(subtree).add(node);
+        for(Node<TextValue> child : node.getChildren()){
+            walkTree(child, pathToNodeMap);
+        }
     }
 
     public void pruneTree(Node<TextValue> node){
